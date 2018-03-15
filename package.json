@@ -1,0 +1,33 @@
+{
+  "name": "caradisiac",
+  "version": "1.0.0",
+  "description": "> Drive comfortably",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "elasticsearch": "^14.2.0",
+    "express": "^4.16.3",
+    "node-car-api": "github:92bondstreet/node-car-api",
+    "p-settle": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sh0ri/caradisiac.git"
+  },
+  "keywords": [
+    "school",
+    "project"
+  ],
+  "author": "Quentin Oliveira Da Silva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sh0ri/caradisiac/issues"
+  },
+  "homepage": "https://github.com/Sh0ri/caradisiac#readme"
+}
