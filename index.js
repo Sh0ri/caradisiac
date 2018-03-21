@@ -30,18 +30,34 @@ async function test_function(res){
 	var brands = await getBrands();
 	var models = brands.map(brand => getModels(brand));
 	var obj = [];
+	var body = [];
+	var temp_body = null;
+	var temp_value = "";
 	var compteur = 1;
 	pSettle(models).then(result=>{
 		result.forEach(function(elem){
 			if(elem.isFulfilled && elem.value.length > 0){
 				obj.push(elem.value);
-				console.log(elem.value);
+				//console.log(elem.value);
+
+				//ELASTICSEARCH
+				temp_body = { index: {_index: 'data', _type: 'brand', _id: compteur } };
+				body.push(temp_body);
+				//console.log("UNE VALUE");
+				//body.push(elem.value);
 				compteur++;
 			}
 			
 		});
-
+		console.log("LE BODY");
+		console.log(body);
+		/*client.bulk({  
+			index: 'data',
+			type: 'brand',
+			body: body
+		});*/
 		
+		/*
 		client.indices.create({
 			index: 'data'
 		}, function(err, resp, status) {
@@ -51,15 +67,16 @@ async function test_function(res){
 				console.log("create", resp);
 			}
 		});
+		*/
 		/*
 		client.indices.delete({index: 'data'},function(err,resp,status) {  
 			console.log("delete",resp);
-		});*/
-
+		});
+		*/
 		res.send(obj);
 		console.log("Nomber of objects : " + (compteur+1));
 	})
-	
+
 	//res.send(obj);
 }
 
