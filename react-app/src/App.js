@@ -25,19 +25,22 @@ class App extends Component {
 
 
   render() {
+    var reg =/[ ]/g;
     const { data } = this.state;
     return (
 
 
 
 
-      <div id='root' className="App">
+      <div id='root' className="row">
+      <div class="list-group col-sm-6" id="root" className= "App">
       {data.map(object =>
         //FOREACH
-        <div id="object">
-        HALLED
-        </div>
+        <a  key={object.uuid} className="list-group-item list-group-item-action col-sm-8" href={object.url}>
+        <h1>{object.name}</h1>
+        </a>
         )}
+      </div>
       </div>
       );
   }

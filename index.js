@@ -113,18 +113,67 @@ async function get_stored_models(res,req_query){
 			query: query
 		}
 	}).then(function (body) {
-		res.send(body.hits.hits);
+		if(body.hits.total>0){
+			var source_array = [];
+			body.hits.hits.forEach(function(object){
+				source_array.push(object._source);
+			})
+			res.send(source_array);
+		}
+		else{
+			res.send(body.hits.hits);
+		}
+		
 	}, function (err) {
 		res.send(err.message);
 	});
 }
 
+
+
 async function store_models(res){
 	var brands = await getBrands();
-	var models = brands.map(brand => getModels(brand));
+	//var models = [];
+	//brands.map(brand=> await getModels(brand))
+	const models = brands.map(async brand => {
+		return await test_get_models(brand);
+	});
 	var obj = [];
 	var compteur = 1;
+	var reg =/[ ]/g;
+	var reg2 =/[(,)]/g;
 
+	//TEST
+	const results = await pSettle(models);
+	const isFulfilled = results.filter(result => result.isFulfilled).map(result => result.value);
+	const model_brand_array = [].concat.apply([], isFulfilled);
+
+	const test = model_brand_array.map(async model_brand=>{
+		//ELASTICSEARCH
+		client.index({  
+			index: 'data',
+
+			type: 'model_brand',
+			body: {
+				"brand": model_brand.brand,
+				"model": model_brand.model,
+				"volume": model_brand.volume,
+				"uuid": model_brand.uuid,
+				"name": model_brand.name,
+				"url": "http://www.caradisiac.com/modele--"+model_brand.model.toLowerCase().replace(reg,"-").replace(reg2,"")+"/",
+			}
+		},function(err,resp,status) {
+			console.log(resp);
+		});
+	})
+
+	const done = await pSettle(test);
+	
+	res.send(model_brand_array);
+	console.log(model_brand_array.length);
+	//END TEST
+
+	/*
 	pSettle(models).then(result=>{
 		result.forEach(function(elem){
 			if(elem.isFulfilled && elem.value.length > 0){
@@ -146,6 +195,7 @@ async function store_models(res){
 						"volume": json_object.volume,
 						"uuid": json_object.uuid,
 						"name": json_object.name,
+						"url": "http://www.caradisiac.com/modele--"+json_object.model.toLowerCase().replace(reg,"-").replace(reg2,"")+"/",
 					}
 				},function(err,resp,status) {
 					console.log(resp);
@@ -158,40 +208,11 @@ async function store_models(res){
 			
 		});
 
-		/*
-		client.index({  
-			index: 'data',
-			id: 'compteur',
-			type: 'model',
-			body: {
-				"ConstituencyName": "Ipswich",
-				"ConstituencyID": "E14000761",
-				"ConstituencyType": "Borough",
-				"Electorate": 74499,
-				"ValidVotes": 48694,
-			}
-		},function(err,resp,status) {
-			console.log(resp);
-		});*/
-
-
-
-		/*client.bulk({  
-			index: 'data',
-			type: 'brand',
-			body: body
-		});*/
-		
-		
-		
-		/*
-		client.indices.delete({index: 'data'},function(err,resp,status) {  
-			console.log("delete",resp);
-		});
-		*/
 		res.send(obj);
 		console.log("Number of objects : " + (compteur-1));
 	})
+
+	*/
 
 	//res.send(obj);
 }
@@ -204,5 +225,11 @@ async function get_brands (res) {
 async function get_models () {
 	const models = await getModels('AUDI');
 	console.log(models);
+	return models;
+}
+
+async function test_get_models(brand){
+	const models = await getModels(brand);
+	//console.log(models);
 	return models;
 }
