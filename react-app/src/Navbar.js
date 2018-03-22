@@ -5,6 +5,7 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  Button,
   NavItem,
   NavLink,
   UncontrolledDropdown,
@@ -13,6 +14,7 @@ import {
   DropdownItem } from 'reactstrap';
 
   import banner from './banner.png';
+
 
   export default class Example extends React.Component {
     constructor(props) {
@@ -33,14 +35,15 @@ import {
         <div>
         <Navbar color="faded" style={{backgroundColor: '#3366cc', position: 'fixed', width:'100%'}} light expand="md">
         <NavbarBrand href="/"><img src={banner} alt="Smiley face" height="120"/></NavbarBrand>
-        <NavItem style={{'padding-left':'500px'}}>
-        Instructions here =>
-        </NavItem>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
         <Nav className="ml-auto" navbar>
         <NavItem>
-        <NavLink href="https://github.com/Sh0ri/caradisiac">Github</NavLink>
+         <Button href="#" onClick={()=>{this.App.Update()}}>Update</Button>
+        </NavItem>
+
+        <NavItem>
+        <Button href="https://github.com/Sh0ri/caradisiac">Github</Button>
         </NavItem>
         <NavItem>
         Click on any column in the table thead to order the table by this element

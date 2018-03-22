@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import loading from './loading.gif';
 import './App.css';
 
 
 const API = '/api/';
 const DEFAULT_QUERY = 'suv';
 
+const loadingStyle = {
+  margin:'auto',
+  padding:'500 auto',
+  width:'40%'
+};
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +25,13 @@ class App extends Component {
     fetch(API + DEFAULT_QUERY)
     .then(response => response.json())
     .then(data => this.setState({ data: data }));
+  }
+
+  Update(){
+    this.setState({data:null});
+    fetch(API + 'populate')
+    .then(response => response.json())
+    .then(() => this.componentDidMount());
   }
 
   Go_To_Href(url){
@@ -44,24 +56,30 @@ class App extends Component {
 
   render() {
     const { data } = this.state;
-    return (
+    if(data){
+      return (
 
 
 
 
-      <div id='root' className="container" style={{padding:'160px'}}>
+        <div id='root' className="container" style={{padding:'160px'}}>
 
-      <table className="table table-hover table-bordered table-hover-cells">
-      <thead>
-      <tr>
-      <th scope="col-sm-auto" onClick={()=>{this.OrderBy('brand')}}>Brand</th>
-      <th scope="col-sm-auto" onClick={()=>{this.OrderBy('model')}}>Model</th>
-      <th scope="col-sm-auto" onClick={()=>{this.OrderBy('name')}}>Name</th>
-      <th scope="col-sm-auto" onClick={()=>{this.OrderBy('volume')}}>Volume</th>
-      </tr>
-      </thead>
-      <tbody>
-      {data.map(object =>
+
+        <button type="button" class="btn btn-primary" onClick={()=>{this.Update()}}>Update</button>
+        <br/>
+        <br/>
+
+        <table className="table table-hover table-bordered table-hover-cells">
+        <thead>
+        <tr>
+        <th scope="col-sm-auto" onClick={()=>{this.OrderBy('brand')}}>Brand</th>
+        <th scope="col-sm-auto" onClick={()=>{this.OrderBy('model')}}>Model</th>
+        <th scope="col-sm-auto" onClick={()=>{this.OrderBy('name')}}>Name</th>
+        <th scope="col-sm-auto" onClick={()=>{this.OrderBy('volume')}}>Volume</th>
+        </tr>
+        </thead>
+        <tbody>
+        {data.map(object =>
         //FOREACH
         <tr class='clickable-row' href={object.url} onClick={()=>{this.Go_To_Href(object.url)}}>
         <th scope="row">{object.brand}</th>
@@ -70,11 +88,19 @@ class App extends Component {
         <td>{object.volume.length > 0 ? object.volume : '???'}</td>
         </tr>
         )}
-      </tbody>
+        </tbody>
 
-      </table>
-      </div>
-      );
+        </table>
+        </div>
+        );
+
+    }
+    else
+      return (
+        <div className="image-container" style={{padding:'160px auto'}}>
+        <img src={loading} alt="loading" style={loadingStyle}/>
+        </div>
+        );
   }
 }
 
