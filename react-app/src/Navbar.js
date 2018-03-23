@@ -38,9 +38,6 @@ import {
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
         <Nav className="ml-auto" navbar>
-        <NavItem>
-         <Button href="#" onClick={()=>{this.App.Update()}}>Update</Button>
-        </NavItem>
 
         <NavItem>
         <Button href="https://github.com/Sh0ri/caradisiac">Github</Button>
