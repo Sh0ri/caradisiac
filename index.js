@@ -84,6 +84,7 @@ async function get_stored_models(res,req_query){
 	//DEFAULT QUERY
 	var query = {match_all:{}};
 	var must = [];
+	var filter = [];
 
 	if(req_query!=={}){
 
@@ -91,16 +92,32 @@ async function get_stored_models(res,req_query){
 		//		{ "match": { "author": "Leo Tolstoy"   }}
 
 		for(x in req_query){
-			console.log("//////////////LE X //////////////////////////");
-			var str = '{"'+x+'":"'+req_query[x]+'"}';
-			var jsonobj = JSON.parse(str);
-			console.log(jsonobj);
-			must.push({"match":jsonobj})
+
+			if(x==="volumemin"){
+				var str = '{"volume":'+ '{"gte":' +req_query[x]+'}}';
+				var jsonobj = JSON.parse(str);
+				console.log("FILTER GTE DONE");
+				filter.push({"range": jsonobj})
+			}
+			else if(x==="volumemax"){
+				var str = '{"volume":'+ '{"lte":' +req_query[x]+'}}';
+				var jsonobj = JSON.parse(str);
+				console.log("FILTER GTE DONE");
+				filter.push({"range": jsonobj})
+			}
+			else{
+				var str = '{"'+x+'":"'+req_query[x]+'"}';
+				var jsonobj = JSON.parse(str);
+				console.log(jsonobj);
+				must.push({"match":jsonobj})
+			}
+
 		}
 
 		query = {
 			"bool": {
-				"must": must
+				"must": must,
+				"filter":filter
 			}
 		}
 	}

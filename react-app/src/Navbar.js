@@ -7,11 +7,7 @@ import {
   Nav,
   Button,
   NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem } from 'reactstrap';
+ } from 'reactstrap';
 
   import banner from './banner.png';
 
