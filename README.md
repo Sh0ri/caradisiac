@@ -30,6 +30,21 @@
 ❯ npm start
 ```
 
+## Commands in browser
+```sh
+❯ http://localhost:9292/api/delete/index
+❯ http://localhost:9292/api/create/index
+❯ http://localhost:9292/api/populate
+❯ http://localhost:9292/api/suv
+❯ http://localhost:9292/api/suv + query (example : ?brand=citroen)
+```
+
+## If the web site doesn't load : 
+DO : 
+```sh
+❯ http://localhost:9292/api/create/index
+❯ http://localhost:9292/api/populate
+```
 ## Things you can do on the web site
 > Order by :
   . Brand
